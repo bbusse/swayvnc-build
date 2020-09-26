@@ -1,43 +1,45 @@
-FROM alpine:3.12 as builder_0
+ARG ALPINE_VERSION=3.12
+FROM alpine:${ALPINE_VERSION}
+LABEL maintainer="Björn Busse <bj.rn@baerlin.eu>"
 
 # Tested with: x86_64 / aarch64
-ENV _APKBUILD https://git.alpinelinux.org/aports/plain/community/neatvnc/APKBUILD
-ENV ARCH aarch64
-ENV USER build
+ENV _APKBUILD="https://git.alpinelinux.org/aports/plain/community/neatvnc/APKBUILD" \
+     ARCH="aarch64" \
+     USER="build"
 
 # Add build requirements
-RUN echo $'http://dl-cdn.alpinelinux.org/alpine/edge/community' >> /etc/apk/repositories
-RUN apk update
-RUN apk add alpine-sdk gnutls-dev
+RUN echo $'http://dl-cdn.alpinelinux.org/alpine/edge/community' >> /etc/apk/repositories \
+    && apk update \
+    && apk add alpine-sdk gnutls-dev 
 
 # Add build user
-RUN addgroup -S $USER && adduser -S $USER -G $USER -G abuild
-RUN chown -R $USER /var/cache/distfiles
+RUN addgroup -S $USER && adduser -S $USER -G $USER -G abuild \
+    && chown -R $USER /var/cache/distfiles
 
 # Build
 USER $USER
 WORKDIR /home/$USER
-RUN curl -LO $_APKBUILD
-RUN abuild-keygen -a -n
-RUN abuild checksum
-RUN abuild -r
+RUN curl -LO $_APKBUILD \
+    && abuild-keygen -a -n \
+    && abuild checksum \
+    && abuild -r
 
 FROM alpine:3.12 as builder_1
 
-ENV _APKBUILD https://git.alpinelinux.org/aports/plain/community/wayvnc/APKBUILD
-ENV PKG_NEATVNC neatvnc-0.3.1-r0.apk
-ENV PKG_NEATVNC_DEV neatvnc-dev-0.3.1-r0.apk
-ENV ARCH aarch64
-ENV USER build
+ENV _APKBUILD="https://git.alpinelinux.org/aports/plain/community/wayvnc/APKBUILD" \
+     PKG_NEATVNC="neatvnc-0.3.1-r0.apk" \
+     PKG_NEATVNC_DEV="neatvnc-dev-0.3.1-r0.apk" \
+     ARCH="aarch64" \
+     USER="build"
 
 # Add build requirements
-RUN echo $'http://dl-cdn.alpinelinux.org/alpine/edge/community' >> /etc/apk/repositories
-RUN apk update
-RUN apk add alpine-sdk
+RUN echo $'http://dl-cdn.alpinelinux.org/alpine/edge/community' >> /etc/apk/repositories \
+    && apk update \
+    && apk add alpine-sdk
 
 # Add build user
-RUN addgroup -S $USER && adduser -S $USER -G $USER -G abuild
-RUN chown -R $USER /var/cache/distfiles
+RUN addgroup -S $USER && adduser -S $USER -G $USER -G abuild \
+    && chown -R $USER /var/cache/distfiles
 
 # Copy
 USER $USER
@@ -52,10 +54,10 @@ RUN apk add --allow-untrusted $PKG_NEATVNC $PKG_NEATVNC_DEV
 # Build
 USER $USER
 WORKDIR /home/$USER
-RUN curl -LO $_APKBUILD
-RUN abuild-keygen -a -n
-RUN abuild checksum
-RUN abuild -r
+RUN curl -LO $_APKBUILD \
+    && abuild-keygen -a -n \
+    && abuild checksum \
+    && abuild -r
 
 COPY entrypoint.sh /
 ENTRYPOINT ["/entrypoint.sh"]
