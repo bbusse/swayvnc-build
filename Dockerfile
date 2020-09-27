@@ -1,7 +1,7 @@
 ARG ALPINE_VERSION=3.12
 FROM alpine:${ALPINE_VERSION}
 LABEL maintainer="Björn Busse <bj.rn@baerlin.eu>"
-LABEL org.opencontainers.image.source https://github.com/bbusseR/swayvnc-build
+LABEL org.opencontainers.image.source https://github.com/bbusse/swayvnc-build
 
 # Tested with: x86_64 / aarch64
 ENV _APKBUILD="https://git.alpinelinux.org/aports/plain/community/neatvnc/APKBUILD" \
