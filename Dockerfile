@@ -6,7 +6,7 @@ LABEL org.opencontainers.image.source https://github.com/bbusse/swayvnc-build
 # Tested with: x86_64 / aarch64
 ENV _APKBUILD="https://git.alpinelinux.org/aports/plain/community/neatvnc/APKBUILD" \
      ARCH="amd64" \
-     USER="build" \
+     USER="build"
 
 # Add build requirements
 RUN echo $'http://dl-cdn.alpinelinux.org/alpine/edge/community' >> /etc/apk/repositories \
