@@ -27,6 +27,8 @@ RUN curl -LO $_APKBUILD \
     && abuild -r
 
 FROM alpine:${ALPINE_VERSION} as builder_1
+ARG ALPINE_VERSION
+ARG NEATVNC_VERSION
 
 ENV _APKBUILD="https://git.alpinelinux.org/aports/plain/community/wayvnc/APKBUILD" \
      PKG_NEATVNC="neatvnc-${NEATVNC_VERSION}-r0.apk" \
