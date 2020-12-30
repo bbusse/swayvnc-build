@@ -1,11 +1,11 @@
-ARG ALPINE_VERSION=3.12
+ARG ALPINE_VERSION=3.12.3
 FROM alpine:${ALPINE_VERSION}
 LABEL maintainer="Björn Busse <bj.rn@baerlin.eu>"
 LABEL org.opencontainers.image.source https://github.com/bbusse/swayvnc-build
 
 # Tested with: x86_64 / aarch64
 ENV _APKBUILD="https://git.alpinelinux.org/aports/plain/community/neatvnc/APKBUILD" \
-     ARCH="aarch64" \
+     ARCH="amd64" \
      USER="build"
 
 # Add build requirements
@@ -25,12 +25,12 @@ RUN curl -LO $_APKBUILD \
     && abuild checksum \
     && abuild -r
 
-FROM alpine:3.12 as builder_1
+FROM alpine:3.12.3 as builder_1
 
 ENV _APKBUILD="https://git.alpinelinux.org/aports/plain/community/wayvnc/APKBUILD" \
      PKG_NEATVNC="neatvnc-0.3.1-r0.apk" \
      PKG_NEATVNC_DEV="neatvnc-dev-0.3.1-r0.apk" \
-     ARCH="aarch64" \
+     ARCH="x86_64" \
      USER="build"
 
 # Add build requirements
