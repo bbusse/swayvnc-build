@@ -25,7 +25,7 @@ RUN curl -LO $_APKBUILD \
     && abuild checksum \
     && abuild -r
 
-FROM alpine:3.12.3 as builder_1
+FROM alpine:${ALPINE_VERSION} as builder_1
 
 ENV _APKBUILD="https://git.alpinelinux.org/aports/plain/community/wayvnc/APKBUILD" \
      NEATVNC_VERSION="0.4.0" \
