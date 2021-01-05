@@ -1,4 +1,4 @@
-ARG ALPINE_VERSION=3.12.3
+ARG ALPINE_VERSION=edge
 ARG NEATVNC_VERSION="0.4.0"
 FROM alpine:${ALPINE_VERSION}
 LABEL maintainer="Björn Busse <bj.rn@baerlin.eu>"
@@ -12,7 +12,8 @@ ENV _APKBUILD="https://git.alpinelinux.org/aports/plain/community/neatvnc/APKBUI
 # Add build requirements
 RUN echo $'http://dl-cdn.alpinelinux.org/alpine/edge/community' >> /etc/apk/repositories \
     && apk update \
-    && apk add alpine-sdk gnutls-dev 
+    && apk upgrade \
+    && apk add alpine-sdk gnutls-dev \
 
 # Add build user
 RUN addgroup -S $USER && adduser -S $USER -G $USER -G abuild \
