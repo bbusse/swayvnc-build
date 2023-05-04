@@ -1,5 +1,6 @@
 ARG ALPINE_VERSION=edge
 ARG NEATVNC_VERSION="0.6.0-r1"
+ARG WAYVNC_VERSION="0.6.2-r0"
 FROM alpine:${ALPINE_VERSION}
 LABEL maintainer="Björn Busse <bj.rn@baerlin.eu>"
 LABEL org.opencontainers.image.source https://github.com/bbusse/swayvnc-build
@@ -60,6 +61,9 @@ USER root
 # Install copied dependencies
 RUN apk add --allow-untrusted $PKG_NEATVNC $PKG_NEATVNC_DEV
 
+ARG WAYVNC_VERSION
+ENV PKG_WAYVNC="wayvnc-${WAYVNC_VERSION}.apk"
+
 # Build
 USER $USER
 WORKDIR /home/$USER
@@ -71,7 +75,8 @@ RUN curl -LO $_APKBUILD \
     && mv APKBUILD_ APKBUILD \
     && abuild-keygen -a -n \
     && abuild checksum \
-    && abuild -r
+    && abuild -r \
+    && cp /home/$USER/packages/home/$(uname -m)/$PKG_WAYVNC .
 
 COPY entrypoint.sh /
 ENTRYPOINT ["/entrypoint.sh"]
