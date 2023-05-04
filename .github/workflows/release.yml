@@ -1,0 +1,48 @@
+name: Release artifacts
+
+on:
+  push:
+    paths-ignore:
+      - '**.md'
+    branches:
+      - '**'
+  pull_request:
+    paths-ignore:
+      - '**.md'
+    branches:
+      - '**'
+  workflow_dispatch:
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Wait for Extraction
+      uses: lewagon/wait-on-check-action@v1.3.1
+      with:
+        ref: ${{ github.ref }}
+        check-name: 'extract-artifacts'
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        wait-interval: 10
+
+    - name: Download artifacts
+      id: download-linux-artifacts
+      uses: dawidd6/action-download-artifact@v2
+      with:
+        workflow: container-extract-artifact.yml
+
+    - name: Release
+      uses: "marvinpinto/action-automatic-releases@latest"
+      with:
+        title: wayvnc
+        repo_token: "${{ secrets.GITHUB_TOKEN }}"
+        prerelease: false
+        automatic_release_tag: "latest"
+        files: |
+          wayvnc-0.6.2-r0-x86_64.apk
+          neatvnc-0.6.0-r1-x86_64.apk
+          neatvnc-dev-0.6.0-r1-x86_64.apk
+          wayvnc-0.6.2-r0-aarch64.apk
+          neatvnc-0.6.0-r1-aarch64.apk
+          neatvnc-dev-0.6.0-r1-aarch64.apk

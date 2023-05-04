@@ -1,0 +1,144 @@
+name: Extract and release build artifact
+
+# Note: This event will only trigger a workflow run
+# if the workflow file is on the default branch
+# - So we need to run this workflow explicitly again
+# after the container are pushed to the registry
+#on:
+#  workflow_run:
+#    workflows: ["Build and release container"]
+#    branches: '**'
+#    types:
+#      - completed
+
+on:
+  push:
+    paths-ignore:
+      - '**.md'
+    branches:
+      - '**'
+  pull_request:
+    paths-ignore:
+      - '**.md'
+    branches:
+      - '**'
+  workflow_dispatch:
+
+jobs:
+  extract-artifacts:
+    runs-on: ubuntu-latest
+    env:
+      USER: build
+      WAYVNC_PKG_NAME: "wayvnc"
+      WAYVNC_PKG_VERSION: "0.6.2-r0"
+      NEATVNC_PKG_NAME: "neatvnc"
+      NEATVNC_PKG_VERSION: "0.6.0-r1"
+      NEATVNC_DEV_PKG_NAME: "neatvnc-dev"
+      NEATVNC_DEV_PKG_VERSION: "0.6.0-r1"
+
+    steps:
+
+    - name: Wait for container release
+      uses: lewagon/wait-on-check-action@v1.3.1
+      with:
+        ref: ${{ github.ref }}
+        check-name: 'build-and-release-container'
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        wait-interval: 10
+
+    - name: Extract build artifact from build container - wayvnc amd64
+      uses: bbusse/actions-docker-extract@latest
+      id: extract_wayvnc_amd64
+      with:
+        image: "ghcr.io/bbusse/swayvnc-build:latest"
+        path: "home/$USER/$WAYVNC_PKG_NAME-$WAYVNC_PKG_VERSION.apk"
+        platform: linux/amd64
+
+    - name: Extract build artifact from build container - neatvnc amd64
+      uses: bbusse/actions-docker-extract@latest
+      id: extract_neatvnc_amd64
+      with:
+        image: "ghcr.io/bbusse/swayvnc-build:latest"
+        path: "home/$USER/$NEATVNC_PKG_NAME-$NEATVNC_PKG_VERSION.apk"
+        platform: linux/amd64
+
+    - name: Extract build artifact from build container - neatvnc amd64
+      uses: bbusse/actions-docker-extract@latest
+      id: extract_neatvnc_dev_amd64
+      with:
+        image: "ghcr.io/bbusse/swayvnc-build:latest"
+        path: "home/$USER/$NEATVNC_DEV_PKG_NAME-$NEATVNC_DEV_PKG_VERSION.apk"
+        platform: linux/amd64
+
+    - name: Rename build artifacts - amd64
+      run: |
+        mv ${{ steps.extract_wayvnc_amd64.outputs.destination }}/$WAYVNC_PKG_NAME-$WAYVNC_PKG_VERSION.apk $WAYVNC_PKG_NAME-$WAYVNC_PKG_VERSION-x86_64.apk
+        mv ${{ steps.extract_neatvnc_amd64.outputs.destination }}/$NEATVNC_PKG_NAME-$NEATVNC_PKG_VERSION.apk $NEATVNC_PKG_NAME-$NEATVNC_PKG_VERSION-x86_64.apk
+        mv ${{ steps.extract_neatvnc_dev_amd64.outputs.destination }}/$NEATVNC_DEV_PKG_NAME-$NEATVNC_DEV_PKG_VERSION.apk $NEATVNC_DEV_PKG_NAME-$NEATVNC_DEV_PKG_VERSION-x86_64.apk
+        ls -al
+
+    - name: Upload artifact - wayvnc amd64
+      uses: actions/upload-artifact@v3
+      with:
+        name: ${{ env.WAYVNC_PKG_NAME }}-${{ env.WAYVNC_PKG_VERSION }}-x86_64.apk
+        path: ${{ env.WAYVNC_PKG_NAME }}-${{ env.WAYVNC_PKG_VERSION }}-x86_64.apk
+
+    - name: Upload artifact - neatvnc amd64
+      uses: actions/upload-artifact@v3
+      with:
+        name: ${{ env.NEATVNC_PKG_NAME }}-${{ env.NEATVNC_PKG_VERSION }}-x86_64.apk
+        path: ${{ env.NEATVNC_PKG_NAME }}-${{ env.NEATVNC_PKG_VERSION }}-x86_64.apk
+
+    - name: Upload artifact - neatvnc-dev amd64
+      uses: actions/upload-artifact@v3
+      with:
+        name: ${{ env.NEATVNC_DEV_PKG_NAME }}-${{ env.NEATVNC_DEV_PKG_VERSION }}-x86_64.apk
+        path: ${{ env.NEATVNC_DEV_PKG_NAME }}-${{ env.NEATVNC_DEV_PKG_VERSION }}-x86_64.apk
+
+    - name: Extract build artifact from build container - wayvnc arm64
+      uses: bbusse/actions-docker-extract@latest
+      id: extract_wayvnc_arm64
+      with:
+        image: "ghcr.io/bbusse/swayvnc-build:latest"
+        path: "home/$USER/$WAYVNC_PKG_NAME-$WAYVNC_PKG_VERSION.apk"
+        platform: linux/arm64
+
+    - name: Extract build artifact from build container - neatvnc arm64
+      uses: bbusse/actions-docker-extract@latest
+      id: extract_neatvnc_arm64
+      with:
+        image: "ghcr.io/bbusse/swayvnc-build:latest"
+        path: "home/$USER/$NEATVNC_PKG_NAME-$NEATVNC_PKG_VERSION.apk"
+        platform: linux/arm64
+
+    - name: Extract build artifact from build container - neatvnc-dev arm64
+      uses: bbusse/actions-docker-extract@latest
+      id: extract_neatvnc_dev_arm64
+      with:
+        image: "ghcr.io/bbusse/swayvnc-build:latest"
+        path: "home/$USER/$NEATVNC_DEV_PKG_NAME-$NEATVNC_DEV_PKG_VERSION.apk"
+        platform: linux/arm64
+
+    - name: Rename build artifacts - arm64
+      run: |
+        mv ${{ steps.extract_wayvnc_arm64.outputs.destination }}/$WAYVNC_PKG_NAME-$WAYVNC_PKG_VERSION.apk $WAYVNC_PKG_NAME-$WAYVNC_PKG_VERSION-aarch64.apk
+        mv ${{ steps.extract_neatvnc_arm64.outputs.destination }}/$NEATVNC_PKG_NAME-$NEATVNC_PKG_VERSION.apk $NEATVNC_PKG_NAME-$NEATVNC_PKG_VERSION-aarch64.apk
+        mv ${{ steps.extract_neatvnc_dev_arm64.outputs.destination }}/$NEATVNC_DEV_PKG_NAME-$NEATVNC_DEV_PKG_VERSION.apk $NEATVNC_DEV_PKG_NAME-$NEATVNC_DEV_PKG_VERSION-aarch64.apk
+
+    - name: Upload artifact - wayvnc arm64
+      uses: actions/upload-artifact@v3
+      with:
+        name: ${{ env.WAYVNC_PKG_NAME }}-${{ env.WAYVNC_PKG_VERSION }}-aarch64.apk
+        path: ${{ env.WAYVNC_PKG_NAME }}-${{ env.WAYVNC_PKG_VERSION }}-aarch64.apk
+
+    - name: Upload artifact - neatvnc arm64
+      uses: actions/upload-artifact@v3
+      with:
+        name: ${{ env.NEATVNC_PKG_NAME }}-${{ env.NEATVNC_PKG_VERSION }}-aarch64.apk
+        path: ${{ env.NEATVNC_PKG_NAME }}-${{ env.NEATVNC_PKG_VERSION }}-aarch64.apk
+
+    - name: Upload artifact - wayvnc arm64
+      uses: actions/upload-artifact@v3
+      with:
+        name: ${{ env.NEATVNC_DEV_PKG_NAME }}-${{ env.NEATVNC_DEV_PKG_VERSION }}-aarch64.apk
+        path: ${{ env.NEATVNC_DEV_PKG_NAME }}-${{ env.NEATVNC_DEV_PKG_VERSION }}-aarch64.apk

@@ -1,4 +1,4 @@
-name: Build Container Image
+name: Build and release container
 
 on:
   push:
@@ -15,7 +15,7 @@ on:
 
 jobs:
 
-  build:
+  build-and-release-container:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
