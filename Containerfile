@@ -17,7 +17,7 @@ ENV _APKBUILD="https://git.alpinelinux.org/aports/plain/community/neatvnc/APKBUI
 RUN echo $'http://dl-cdn.alpinelinux.org/alpine/edge/community' >> /etc/apk/repositories \
     && apk update \
     && apk upgrade \
-    && apk add alpine-sdk gnutls-dev
+    && apk add alpine-sdk curl gnutls-dev
 
 # Add build user
 RUN addgroup -S $USER && adduser -D $USER -G $USER -G abuild \
