@@ -15,6 +15,8 @@ ENV _APKBUILD="https://git.alpinelinux.org/aports/plain/community/neatvnc/APKBUI
 
 # Add build requirements
 RUN echo $'http://dl-cdn.alpinelinux.org/alpine/edge/community' >> /etc/apk/repositories \
+    # Add signing keys
+    && apk add -X https://nl.alpinelinux.org/alpine/edge/main -u alpine-keys --allow-untrusted \
     && apk update \
     && apk upgrade \
     && apk add alpine-sdk curl gnutls-dev
