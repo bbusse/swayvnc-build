@@ -1,6 +1,6 @@
 ARG ALPINE_VERSION=edge
-ARG NEATVNC_VERSION="0.6.0-r1"
-ARG WAYVNC_VERSION="0.6.2-r0"
+ARG NEATVNC_VERSION="0.8.0-r0"
+ARG WAYVNC_VERSION="0.8.0-r0"
 FROM alpine:${ALPINE_VERSION}
 LABEL maintainer="Björn Busse <bj.rn@baerlin.eu>"
 LABEL org.opencontainers.image.source https://github.com/bbusse/swayvnc-build
