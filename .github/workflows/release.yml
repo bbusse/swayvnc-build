@@ -40,9 +40,9 @@ jobs:
         prerelease: false
         automatic_release_tag: "latest"
         files: |
-          wayvnc-0.6.2-r0-x86_64.apk
-          neatvnc-0.6.0-r1-x86_64.apk
-          neatvnc-dev-0.6.0-r1-x86_64.apk
-          wayvnc-0.6.2-r0-aarch64.apk
-          neatvnc-0.6.0-r1-aarch64.apk
-          neatvnc-dev-0.6.0-r1-aarch64.apk
+          neatvnc-0.8.1-r0-x86_64.apk
+          neatvnc-dev-0.8.1-r0-x86_64.apk
+          neatvnc-0.8.1-r0-aarch64.apk
+          neatvnc-dev-0.8.1-r0-aarch64.apk
+          wayvnc-0.8.0-r0-x86_64.apk
+          wayvnc-0.8.0-r0-aarch64.apk
