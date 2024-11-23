@@ -42,7 +42,7 @@ RUN abuild checksum \
     && cp /home/$USER/packages/home/$(uname -m)/$PKG_NEATVNC_DEV . \
     && cp /home/$USER/packages/home/$(uname -m)/$PKG_NEATVNC .
 
-FROM alpine:${ALPINE_VERSION} as builder_1
+FROM alpine:${ALPINE_VERSION} AS builder_1
 ARG ALPINE_VERSION
 ARG NEATVNC_VERSION
 
