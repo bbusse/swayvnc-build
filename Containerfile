@@ -4,7 +4,7 @@ ARG NEATVNC_VERSION="0.8.1-r0"
 ARG WAYVNC_VERSION="0.8.0-r0"
 FROM alpine:${ALPINE_VERSION}
 LABEL maintainer="Björn Busse <bj.rn@baerlin.eu>"
-LABEL org.opencontainers.image.source https://github.com/bbusse/swayvnc-build
+LABEL org.opencontainers.image.source=https://github.com/bbusse/swayvnc-build
 ARG TARGETARCH
 ARG NEATVNC_VERSION
 
