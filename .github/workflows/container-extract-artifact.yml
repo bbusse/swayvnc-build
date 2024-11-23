@@ -30,11 +30,11 @@ jobs:
     env:
       USER: build
       WAYVNC_PKG_NAME: "wayvnc"
-      WAYVNC_PKG_VERSION: "0.6.2-r0"
+      WAYVNC_PKG_VERSION: "0.8.0-r0"
       NEATVNC_PKG_NAME: "neatvnc"
-      NEATVNC_PKG_VERSION: "0.6.0-r1"
+      NEATVNC_PKG_VERSION: "0.8.1-r0"
       NEATVNC_DEV_PKG_NAME: "neatvnc-dev"
-      NEATVNC_DEV_PKG_VERSION: "0.6.0-r1"
+      NEATVNC_DEV_PKG_VERSION: "0.8.1-r0"
 
     steps:
 
