@@ -42,7 +42,7 @@ jobs:
       uses: lewagon/wait-on-check-action@v1.3.1
       with:
         ref: ${{ github.ref }}
-        check-name: 'build-and-release-container'
+        check-name: 'container-build-push'
         repo-token: ${{ secrets.GITHUB_TOKEN }}
         wait-interval: 10
 
