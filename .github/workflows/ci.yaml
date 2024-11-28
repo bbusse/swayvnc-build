@@ -1,0 +1,28 @@
+name: Build and push container
+
+on:
+  push:
+    paths-ignore:
+      - '**.md'
+    branches:
+      - '**'
+  pull_request:
+    paths-ignore:
+      - '**.md'
+    branches:
+      - '**'
+  workflow_dispatch:
+
+jobs:
+  container-build-push:
+    uses: bbusse/github-workflows/.github/workflows/container-build-push.yaml@dev
+    with:
+      image_name: 'swayvnc-build'
+      image_repository: 'bbusse/swayvnc-build'
+      #image_tags: ${{ github.run_number }}_${{ github.ref_name }}_${{ github.sha }}
+      image_tags: |
+        ${{ vars.GHCR_DOMAIN }}/bbusse/swayvnc-build:${{ github.sha }}
+        ghcr.io/bbusse/swayvnc-build:latest
+        ghcr.io/bbusse/swayvnc-build:${{ github.run_number }}_${{ github.ref_name }}_${{ github.sha }}
+      container_registry: 'ghcr'
+      container_push_to_registry: true
